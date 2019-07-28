@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Arrays;
 
 public class FileSplit {
 
@@ -12,7 +13,6 @@ public class FileSplit {
    	{
         	inputStream = new FileInputStream(input_path + "terms.pdf");
     	    	byte[] buffer = new byte[8192];
-		byte[][] allbyte=new byte[100][8192];
     		ByteArrayOutputStream baos = new ByteArrayOutputStream();
      		ByteArrayOutputStream ba = new ByteArrayOutputStream();
 
@@ -21,22 +21,27 @@ public class FileSplit {
     		while ((bytesRead = inputStream.read(buffer)) != -1)
     		{
       			baos.write(buffer, 0, bytesRead);
-			ba.write(buffer,0,bytesRead);
-			allbyte[i][] = buffer;
-			ba.reset();
 			i++;
     		}
+       		byte[][] allbyte=new byte[i][8192];
+
 		byte b [] = baos.toByteArray();
 		// b.length array length
 		System.out.println("size page " + b.length);
 	        for(int x = 0; x < 1000; x++) {
                 	System.out.print((char)b[x]);
                 }
-		
+		for(int x = 0; x < i; x++) {
+			int byteblock = 8192*x;
+			int endblock = byteblock + 8192;
+			if (endblock > b.length) endblock = b.length; // last block
+			allbyte[x] = Arrays.copyOfRange(b,byteblock,endblock);
+		}
+
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream( );
 
-    		for(int x=0;x<(i-1);x++) {
-			outputStream.write( allbyte[x][] );
+    		for(int x=0;x<i;x++) {
+			outputStream.write( allbyte[x] );
 		}
 
 		byte c[] = outputStream.toByteArray( );
@@ -45,8 +50,6 @@ public class FileSplit {
 
                 // Starts writing the bytes in it
                 os.write(b);
-                System.out.println("Successfully"
-                               + " byte inserted");
 
                 // Close the file
                 os.close();
@@ -54,8 +57,7 @@ public class FileSplit {
 
                 // Starts writing the bytes in it
                 os1.write(c);
-                System.out.println("Successfully"
-                               + " byte inserted");
+                System.out.println("Successfully done");
 
                 // Close the file
                 os1.close();
