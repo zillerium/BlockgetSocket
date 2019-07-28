@@ -19,8 +19,24 @@ public class GreetingServer extends Thread {
             
             System.out.println("Just connected to " + server.getRemoteSocketAddress());
             DataInputStream in = new DataInputStream(server.getInputStream());
-            
-            System.out.println(in.readUTF());
+           
+	     int length = in.readInt();
+           // System.out.println(in.readUTF());
+            byte[] message = new byte[length];
+
+	    if(length>0) {
+   		in.readFully(message, 0, message.length); // read the message
+	    }
+              OutputStream os1 = new FileOutputStream("./termsout2.pdf");
+
+                // Starts writing the bytes in it
+                os1.write(message);
+                System.out.println("Successfully done");
+
+                // Close the file
+                os1.close();
+
+
             DataOutputStream out = new DataOutputStream(server.getOutputStream());
             out.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress()
                + "\nGoodbye!");

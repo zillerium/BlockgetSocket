@@ -1,9 +1,13 @@
 import java.io.*;
 import java.util.Arrays;
+import java.net.*;
 
 public class FileSplit {
 
     public static void main(String[] args) {
+
+        String serverName = args[0];
+        int port = Integer.parseInt(args[1]);
 
         String input_path = "./";
         String output_path = "./";
@@ -45,6 +49,12 @@ public class FileSplit {
 		}
 
 		byte c[] = outputStream.toByteArray( );
+      		Socket socket = new Socket(serverName, port);
+
+		DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
+
+		dOut.writeInt(c.length); // write length of the message
+		dOut.write(c); 
 
 		OutputStream os = new FileOutputStream("./termsout.pdf");
 

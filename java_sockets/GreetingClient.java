@@ -14,8 +14,10 @@ public class GreetingClient {
          System.out.println("Just connected to " + client.getRemoteSocketAddress());
          OutputStream outToServer = client.getOutputStream();
          DataOutputStream out = new DataOutputStream(outToServer);
-         
-         out.writeUTF("Hello from " + client.getLocalSocketAddress());
+
+	 String fileContents = "This is a line from my file";
+
+         out.writeUTF(fileContents);
          InputStream inFromServer = client.getInputStream();
          DataInputStream in = new DataInputStream(inFromServer);
          
